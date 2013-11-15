@@ -288,6 +288,7 @@ data DecodedRawTransaction =
                           -- | The vector of transactions out.
                           , decVout :: Vector TxOut
                           }
+  deriving Show
 
 instance FromJSON DecodedRawTransaction where
     parseJSON (Object o) = DecodedRawTransaction <$> o .: "hex"
@@ -340,6 +341,7 @@ data RawSignedTransaction =
     RawSignedTransaction { rawSigned :: HexString
                          , hasCompleteSigSet :: Bool
                          }
+  deriving Show
 
 -- I have no idea why they use a 1/0 to represent a boolean.
 instance FromJSON RawSignedTransaction where

@@ -466,6 +466,7 @@ encryptWallet auth pass = stupidAPI <$> callApi auth "encryptwallet" [ tj pass ]
 -- | Just a handy wrapper to help us get only the "isvalid" field of the JSON.
 --   The structure is much too complicated for what it needs to do.
 data IsValid = IsValid { getValid :: Bool }
+  deriving Show
 
 instance FromJSON IsValid where
     parseJSON (Object o) = IsValid <$> o .: "isvalid"

@@ -215,6 +215,7 @@ getBlockTemplate auth = callApi auth "getblocktemplate" []
 --
 --   We use 'StupidReturnValue' to parse this ridiculous API.
 data StupidReturnValue = SRV { unStupid :: Bool }
+  deriving Show
 
 instance FromJSON StupidReturnValue where
     parseJSON Null = return $ SRV True

@@ -29,6 +29,7 @@ import           Data.Aeson
 import           Data.Maybe
 import           Data.Vector ( Vector )
 import qualified Data.Vector          as V
+import           Debug.Trace
 import           Network.Bitcoin.Types
 import           Network.Browser
 import           Network.HTTP hiding ( password )
@@ -89,12 +90,18 @@ callApi' auth rpcReqBody = do
 --   > let result = callBtc "getbalance" [ tj "account-name", tj 6 ]
 --
 --   On error, throws a 'BitcoinException'.
-callApi :: FromJSON v
+callApi :: (FromJSON v, Show v)
         => Auth    -- ^ authentication credentials for bitcoind
         -> Text    -- ^ command name
         -> [Value] -- ^ command arguments
         -> IO v
-callApi auth cmd params = readVal =<< callApi' auth jsonRpcReqBody
+callApi auth cmd params = do
+  traceIO $ "network-bitcoin: req=" ++ show cmd ++ " params=" ++ show params ++ "\n"
+  rawResponse <- callApi' auth jsonRpcReqBody
+  traceIO $ "network-bitcoin: resp=" ++ show rawResponse ++ "\n"
+  asJson <- readVal rawResponse
+  traceIO $ "network-bitcoin: parsedresp=" ++ show asJson
+  return asJson
     where
         readVal bs = case decode' bs of
                          Just r@(BitcoinRpcResponse {btcError=NoError})
@@ -113,6 +120,7 @@ callApi auth cmd params = readVal =<< callApi' auth jsonRpcReqBody
 
 -- | Used to allow "null" to decode to a tuple.
 data Nil = Nil { unNil :: () }
+  deriving Show
 
 instance FromJSON Nil where
     parseJSON Null = return $ Nil ()

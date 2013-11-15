@@ -6,9 +6,7 @@ module Main where
 import Test.QuickCheck
 import Test.QuickCheck.Monadic
 import Network.Bitcoin
-import Data.Aeson
-import Data.Vector ( empty, mapM )
-
+import Data.Vector ( empty )
 
 main :: IO ()
 main = mapM_ qcOnce [ canGetInfo
