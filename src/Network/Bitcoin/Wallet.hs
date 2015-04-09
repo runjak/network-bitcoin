@@ -157,7 +157,7 @@ setAccount client addr acc = unNil <$> callApi client "setaccount" [ tj addr, tj
 getAccount :: Client -> Address -> IO Account
 getAccount client addr = callApi client "getaccount" [ tj addr ]
 
--- | Returns the list of addresses for the given address.
+-- | Returns the list of addresses for the given account.
 getAddressesByAccount :: Client -> Account -> IO (Vector Address)
 getAddressesByAccount client acc = callApi client "getaddressesbyaccount" [ tj acc ]
 
